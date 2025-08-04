@@ -1,0 +1,27 @@
+name: Update README with Latest Repositories
+
+on:
+  schedule:
+    - cron: "0 */6 * * *" # Runs every 6 hours
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Generate Repository List
+        uses: jamesgeorge007/github-activity-readme@v0.3.0
+        with:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAX_LINES: 5
+
+      - name: Commit Changes
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add .
+          git commit -m "Updated README with latest repositories" || echo "No changes to commit"
+          git push
