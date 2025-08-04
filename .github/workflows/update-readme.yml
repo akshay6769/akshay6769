@@ -15,8 +15,9 @@ jobs:
       - name: Generate Repository List
         uses: jamesgeorge007/github-activity-readme@v0.3.0
         with:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MAX_LINES: 5
+          GH_USERNAME: akshay6769
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit Changes
         run: |
@@ -25,3 +26,4 @@ jobs:
           git add .
           git commit -m "Updated README with latest repositories" || echo "No changes to commit"
           git push
+
