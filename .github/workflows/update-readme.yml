@@ -3,27 +3,41 @@ name: Update README with Latest Repositories
 on:
   schedule:
     - cron: "0 */6 * * *" # Runs every 6 hours
-  workflow_dispatch:
+  workflow_dispatch: # Allows manual triggering from GitHub UI
+
+permissions:
+  contents: write
+  actions: read
 
 jobs:
   update-readme:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v3
-
-      - name: Generate Repository List
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+          
+      - name: Update README with GitHub Activity
         uses: jamesgeorge007/github-activity-readme@v0.3.0
         with:
           GH_USERNAME: akshay6769
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Commit Changes
+          
+      - name: Commit and Push Changes
         run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add .
-          git commit -m "Updated README with latest repositories" || echo "No changes to commit"
-          git push
-
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Check if there are any changes
+          if [[ -n $(git status --porcelain) ]]; then
+            git add README.md
+            git commit -m "📊 Update README with latest GitHub activity"
+            git push origin main
+            echo "✅ README updated successfully!"
+          else
+            echo "ℹ️ No changes detected in README"
+          fi
