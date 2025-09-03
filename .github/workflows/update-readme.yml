@@ -1,8 +1,7 @@
 name: Update README with Latest Repositories
-
 on:
   schedule:
-    - cron: "0 */6 * * *" # Runs every 6 hours
+    - cron: "0 */6 * * *" # Runs every 6 hours (fixed syntax)
   workflow_dispatch: # Allows manual triggering from GitHub UI
 
 permissions:
@@ -21,7 +20,7 @@ jobs:
           fetch-depth: 0
           
       - name: Update README with GitHub Activity
-        uses: jamesgeorge007/github-activity-readme@v0.3.0
+        uses: jamesgeorge007/github-activity-readme@master
         with:
           GH_USERNAME: akshay6769
         env:
